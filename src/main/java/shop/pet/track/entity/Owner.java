@@ -88,23 +88,7 @@ public class Owner {
     public void setPets(Set<Pet> pets) {
         this.pets = pets;
     }
-//    public List<Pet> getPets() {
-//        return pets;
-//    }
 
-//    public void setPets(List<Pet> pets) {
-//        this.pets = pets;
-//    }
-//    public void addPet(Pet pet){
-//        if(this.pets==null){
-//            this.pets  = new ArrayList<>();
-//
-//
-//        }
-//        this.pets.add(pet);
-//        pet.setOwner(this);
-//
-//    }
 
     @Override
     public String toString() {
