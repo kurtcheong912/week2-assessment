@@ -2,6 +2,7 @@ package shop.pet.track.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,22 +12,23 @@ public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
+
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "owner_id")
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
     private Owner owner;
 
     @Column(name = "breed")
     private String breed;
 
     @Column(name = "date_created")
-    private Date dateCreated;
+    private LocalDate dateCreated;
 
     @Column(name = "date_modified")
-    private Date dateModified;
+    private LocalDate dateModified;
 
     public Pet() {
     }
@@ -36,11 +38,11 @@ public class Pet {
         this.breed = breed;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,19 +70,19 @@ public class Pet {
         this.breed = breed;
     }
 
-    public Date getDateCreated() {
+    public LocalDate getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateModified() {
+    public LocalDate getDateModified() {
         return dateModified;
     }
 
-    public void setDateModified(Date dateModified) {
+    public void setDateModified(LocalDate dateModified) {
         this.dateModified = dateModified;
     }
 

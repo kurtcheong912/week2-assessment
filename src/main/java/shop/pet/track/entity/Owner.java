@@ -1,10 +1,13 @@
 package shop.pet.track.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "owner")
@@ -21,13 +24,14 @@ public class Owner {
     private String lastName;
 
     @Column(name = "date_created")
-    private Date dateCreated;
+    private LocalDate dateCreated;
 
     @Column(name = "date_modified")
-    private Date dateModified;
+    private LocalDate dateModified;
 
-    @OneToMany(mappedBy = "owner",cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Pet> pets;
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "owner", cascade = { CascadeType.MERGE })
+    @JsonIgnore
+    private Set<Pet> pets;
 
     public Owner() {
     }
@@ -61,38 +65,46 @@ public class Owner {
         this.lastName = lastName;
     }
 
-    public Date getDateCreated() {
+    public LocalDate getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateModified() {
+    public LocalDate getDateModified() {
         return dateModified;
     }
 
-    public void setDateModified(Date dateModified) {
+    public void setDateModified(LocalDate dateModified) {
         this.dateModified = dateModified;
     }
 
-    public List<Pet> getPets() {
+    public Set<Pet> getPets() {
         return pets;
     }
 
-    public void setPets(List<Pet> pets) {
+    public void setPets(Set<Pet> pets) {
         this.pets = pets;
     }
-    public void addPet(Pet pet){
-        if(pets==null){
-            pets  = new ArrayList<>();
+//    public List<Pet> getPets() {
+//        return pets;
+//    }
 
-
-        }
-        pets.add(pet);
-
-    }
+//    public void setPets(List<Pet> pets) {
+//        this.pets = pets;
+//    }
+//    public void addPet(Pet pet){
+//        if(this.pets==null){
+//            this.pets  = new ArrayList<>();
+//
+//
+//        }
+//        this.pets.add(pet);
+//        pet.setOwner(this);
+//
+//    }
 
     @Override
     public String toString() {
