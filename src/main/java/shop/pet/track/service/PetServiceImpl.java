@@ -26,7 +26,6 @@ public class PetServiceImpl implements PetService {
     @Override
     @Transactional
     public void addPetsToOwner(Integer id, Pet pet) {
-
         Owner owner = ownerDAO.find(id);
         if (owner == null) {
             throw new NotFoundException("owner not found id :" + id);
