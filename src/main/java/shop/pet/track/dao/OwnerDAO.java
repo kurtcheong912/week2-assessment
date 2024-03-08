@@ -7,14 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 public interface OwnerDAO {
+    Owner find(Integer id);
 
-    Owner findOwner(int id);
-    Owner addOwner(Owner owner);
-    Owner getPetsByOwnerId(int id);
+    void add(Owner owner);
 
-    Owner getOwnerByPetId(int id);
+    Owner getOwnerByPetId(Integer id);
 
     List<Owner> getOwnerByDate(LocalDate date);
 
-    List<Owner>  getALlOwner();
+    List<Owner>  getAllOwners();
 }

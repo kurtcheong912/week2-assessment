@@ -1,6 +1,7 @@
 package shop.pet.track.service;
 
 import jakarta.transaction.Transactional;
+import org.hibernate.tool.schema.spi.SqlScriptException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shop.pet.track.dao.OwnerDAO;
@@ -10,100 +11,67 @@ import shop.pet.track.entity.Pet;
 import shop.pet.track.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
-
 @Service
-public class PetTrackerServiceImpl implements PetTrackerService {
+public class PetServiceImpl implements PetService{
     OwnerDAO ownerDAO;
     PetDAO petDAO;
 
     @Autowired
-    public PetTrackerServiceImpl(OwnerDAO ownerDAO, PetDAO petDAO) {
+    public PetServiceImpl(OwnerDAO ownerDAO, PetDAO petDAO) {
         this.ownerDAO = ownerDAO;
         this.petDAO = petDAO;
     }
 
     @Override
     @Transactional
-    public Owner addOwner(Owner owner) {
-        LocalDate localDate = LocalDate.now();
-        owner.setDateCreated(localDate);
-        return ownerDAO.addOwner(owner);
-    }
-
-    @Override
-    @Transactional
-    public Pet addPetsToOwner(int id, Pet pet) {
+    public void addPetsToOwner(Integer id, Pet pet) {
         try {
-            Owner owner = ownerDAO.findOwner(id);
+            Owner owner = ownerDAO.find(id);
             LocalDate localDate = LocalDate.now();
             pet.setOwner(owner);
             pet.setDateCreated(localDate);
+            petDAO.addPet(pet);
         } catch (Exception ex) {
             throw new NotFoundException("owner not found id :" + id);
         }
-        return petDAO.addPetsToOwner(pet);
+
     }
 
     @Override
     @Transactional
-    public void deletePet(int id) {
+    public void deletePet(Integer id) {
         try {
-            petDAO.deletePet(id);
+            Pet pet = petDAO.find(id);
+            pet.setOwner(null);
+            petDAO.delete(pet);
         } catch (Exception ex) {
             throw new NotFoundException("Pet not found" + id);
         }
-
     }
 
     @Override
     @Transactional
-    public void updatePet(int id, String name, String breed) {
+    public void updatePet(Integer id, String name, String breed) {
         try {
             LocalDate localDate = LocalDate.now();
-            Pet pet = petDAO.findPet(id);
+            Pet pet = petDAO.find(id);
             pet.setDateModified(localDate);
             pet.setBreed(breed);
             pet.setName(name);
-            petDAO.updatePet(pet);
+            petDAO.update(pet);
         } catch (Exception ex) {
             throw new NotFoundException("Pet not found" + id);
         }
-
     }
 
     @Override
-    public Owner findOwnerOfCertainPet(int id) {
+    public Set<Pet> getPetsByOwnerId(Integer id) {
         try {
-            return ownerDAO.getOwnerByPetId(id);
-        } catch (Exception ex) {
-            throw new NotFoundException("Pet not found" + id);
-        }
-
-    }
-
-    @Override
-    public Set<Pet> getPetsByOwnerId(int id) {
-        try {
-            Owner owner = ownerDAO.getPetsByOwnerId(id);
-            Set<Pet> pets = owner.getPets();
+            Set<Pet> pets  = petDAO.getPetsByOwnerId(id);
             return pets;
-        } catch (Exception ex) {
+        } catch (SqlScriptException ex) {
             throw new NotFoundException("Owner not found" + id);
         }
-
     }
-
-    @Override
-    public List<Owner> getOwnerByDate(LocalDate date) {
-        return ownerDAO.getOwnerByDate(date);
-    }
-
-    @Override
-    public List<Owner> getAllOwner() {
-        return ownerDAO.getALlOwner();
-    }
-
-
 }

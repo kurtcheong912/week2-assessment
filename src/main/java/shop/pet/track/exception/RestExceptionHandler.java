@@ -11,21 +11,17 @@ public class RestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorExceptionResponse> handleException(NotFoundException ex){
         ErrorExceptionResponse error = new ErrorExceptionResponse();
-
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
-
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler
     public ResponseEntity<ErrorExceptionResponse> handleException(Exception ex){
         ErrorExceptionResponse error = new ErrorExceptionResponse();
-
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setMessage(ex.getMessage());
         error.setTimeStamp(System.currentTimeMillis());
-
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

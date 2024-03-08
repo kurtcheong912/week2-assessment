@@ -8,7 +8,7 @@ public class ErrorExceptionResponse {
     public ErrorExceptionResponse() {
     }
 
-    public ErrorExceptionResponse(int status, String message, long timeStamp) {
+    public ErrorExceptionResponse(Integer status, String message, long timeStamp) {
         this.status = status;
         this.message = message;
         this.timeStamp = timeStamp;
@@ -18,7 +18,7 @@ public class ErrorExceptionResponse {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

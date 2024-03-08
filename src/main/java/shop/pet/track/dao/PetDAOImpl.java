@@ -1,9 +1,15 @@
 package shop.pet.track.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import shop.pet.track.entity.Owner;
 import shop.pet.track.entity.Pet;
+
+import java.util.List;
+import java.util.Set;
+
 @Repository
 public class PetDAOImpl implements PetDAO  {
     EntityManager entityManager;
@@ -14,23 +20,33 @@ public class PetDAOImpl implements PetDAO  {
     }
 
     @Override
-    public Pet addPetsToOwner(Pet pet) {
-        return entityManager.merge(pet);
+    public void addPet(Pet pet) {
+        entityManager.persist(pet);
     }
     @Override
-    public Pet findPet(int id) {
-
+    public Pet find(Integer id) {
         return entityManager.find(Pet.class, id);
     }
     @Override
-    public void deletePet(int id) {
-        Pet pet = entityManager.find(Pet.class, id);
-        pet.setOwner(null);
+    public void delete(Pet pet) {
+
         entityManager.remove(pet);
     }
 
     @Override
-    public void updatePet(Pet pet) {
+    public void update(Pet pet) {
         entityManager.merge(pet);
+    }
+
+    @Override
+    public Set<Pet> getPetsByOwnerId(Integer id) {
+        TypedQuery<Owner> query = entityManager.createQuery(
+                "select i from Owner i "
+                        + "JOIN FETCH i.pets "
+                        + "where i.id = :data"
+                , Owner.class);
+        query.setParameter("data", id);
+        Owner owner = query.getSingleResult();
+        return owner.getPets();
     }
 }

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Repository
 public class OwnerDAOImpl implements OwnerDAO {
-
     EntityManager entityManager;
 
     @Autowired
@@ -21,32 +20,17 @@ public class OwnerDAOImpl implements OwnerDAO {
     }
 
     @Override
-    public Owner findOwner(int id) {
-
+    public Owner find(Integer id) {
             return entityManager.find(Owner.class, id);
-
     }
 
     @Override
-    public Owner addOwner(Owner owner) {
-
-        return entityManager.merge(owner);
+    public void add(Owner owner) {
+         entityManager.persist(owner);
     }
 
     @Override
-    public Owner getPetsByOwnerId(int id) {
-        TypedQuery<Owner> query = entityManager.createQuery(
-                "select i from Owner i "
-                        + "JOIN FETCH i.pets "
-                        + "where i.id = :data"
-                , Owner.class);
-        query.setParameter("data", id);
-        Owner owner = query.getSingleResult();
-        return owner;
-    }
-
-    @Override
-    public Owner getOwnerByPetId(int id) {
+    public Owner getOwnerByPetId(Integer id) {
         TypedQuery<Pet> query = entityManager.createQuery(
                 "select i from Pet i "
                         + "JOIN FETCH i.owner "
@@ -59,24 +43,21 @@ public class OwnerDAOImpl implements OwnerDAO {
 
     @Override
     public List<Owner> getOwnerByDate(LocalDate date) {
-        System.out.println("helloo the date is "+date);
         TypedQuery<Owner> query = entityManager.createQuery(
                 "select i from Owner i "
                         + "where i.dateCreated = :data "
                 , Owner.class);
         query.setParameter("data", date);
         List<Owner> owners = query.getResultList();;
-        System.out.println(owners);
         return owners;
     }
 
     @Override
-    public List<Owner> getALlOwner() {
+    public List<Owner> getAllOwners() {
         TypedQuery<Owner> query = entityManager.createQuery(
                 "select i from Owner i "
                 , Owner.class);
         List<Owner> owners = query.getResultList();
-
         return owners;
     }
 }
