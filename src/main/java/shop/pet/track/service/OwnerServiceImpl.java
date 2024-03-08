@@ -1,20 +1,22 @@
 package shop.pet.track.service;
 
 import jakarta.transaction.Transactional;
-import org.hibernate.tool.schema.spi.SqlScriptException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shop.pet.track.dao.OwnerDAO;
 import shop.pet.track.dao.PetDAO;
 import shop.pet.track.entity.Owner;
+import shop.pet.track.entity.Pet;
 import shop.pet.track.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Service
-public class OwnerServiceImpl implements OwnerService{
+public class OwnerServiceImpl implements OwnerService {
     OwnerDAO ownerDAO;
     PetDAO petDAO;
+
     @Autowired
     public OwnerServiceImpl(OwnerDAO ownerDAO, PetDAO petDAO) {
         this.ownerDAO = ownerDAO;
@@ -31,11 +33,11 @@ public class OwnerServiceImpl implements OwnerService{
 
     @Override
     public Owner findOwnerOfCertainPet(Integer id) {
-        try {
-            return ownerDAO.getOwnerByPetId(id);
-        } catch (SqlScriptException ex) {
-            throw new NotFoundException("Pet not found" + id);
+        Pet pet = petDAO.find(id);
+        if (pet == null) {
+            throw new NotFoundException("pet not found" + id);
         }
+        return ownerDAO.getOwnerByPetId(id);
     }
 
     @Override

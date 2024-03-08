@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import shop.pet.track.entity.Owner;
 import shop.pet.track.entity.Pet;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,12 +20,12 @@ public class OwnerDAOImpl implements OwnerDAO {
 
     @Override
     public Owner find(Integer id) {
-            return entityManager.find(Owner.class, id);
+        return entityManager.find(Owner.class, id);
     }
 
     @Override
     public void add(Owner owner) {
-         entityManager.persist(owner);
+        entityManager.persist(owner);
     }
 
     @Override
@@ -48,7 +47,8 @@ public class OwnerDAOImpl implements OwnerDAO {
                         + "where i.dateCreated = :data "
                 , Owner.class);
         query.setParameter("data", date);
-        List<Owner> owners = query.getResultList();;
+        List<Owner> owners = query.getResultList();
+        ;
         return owners;
     }
 

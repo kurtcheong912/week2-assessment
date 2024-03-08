@@ -9,7 +9,7 @@ public interface PetService {
 
     void deletePet(Integer id);
 
-    void updatePet(Integer id,String name, String breed);
+    void updatePet(Integer id,Pet pet);
 
     Set<Pet> getPetsByOwnerId(Integer id);
 }

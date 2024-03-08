@@ -18,9 +18,13 @@ public class PetController {
     }
 
     @PostMapping("pet/{ownerId}")
-    public ResponseEntity<Void> addPet(@PathVariable Integer ownerId, @RequestBody Pet pet) {
-        petService.addPetsToOwner(ownerId, pet);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> addPet(@PathVariable Integer ownerId, @RequestBody Pet pet) {
+        if (pet.getName()== null || pet.getBreed() == null) {
+            return new ResponseEntity<>(" name or breed is empty", HttpStatus.BAD_REQUEST);
+        }else{
+            petService.addPetsToOwner(ownerId, pet);
+            return new ResponseEntity<>("added new pet", HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("pet/{petId}")
@@ -29,9 +33,9 @@ public class PetController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("pet/{petId}/{name}/{breed}")
-    public ResponseEntity<Void> updatePet(@PathVariable Integer petId, @PathVariable String name, @PathVariable String breed) {
-        petService.updatePet(petId, name, breed);
+    @PutMapping("pet/{petId}")
+    public ResponseEntity<Void> updatePet(@PathVariable Integer petId, @RequestBody Pet pet) {
+        petService.updatePet(petId,pet);
         return ResponseEntity.noContent().build();
     }
 

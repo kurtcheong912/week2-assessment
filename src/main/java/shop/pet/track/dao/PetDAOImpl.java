@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import shop.pet.track.entity.Owner;
 import shop.pet.track.entity.Pet;
-
-import java.util.List;
 import java.util.Set;
 
 @Repository
-public class PetDAOImpl implements PetDAO  {
+public class PetDAOImpl implements PetDAO {
     EntityManager entityManager;
 
     @Autowired
@@ -23,10 +21,12 @@ public class PetDAOImpl implements PetDAO  {
     public void addPet(Pet pet) {
         entityManager.persist(pet);
     }
+
     @Override
     public Pet find(Integer id) {
         return entityManager.find(Pet.class, id);
     }
+
     @Override
     public void delete(Pet pet) {
 

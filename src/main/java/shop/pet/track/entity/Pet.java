@@ -1,10 +1,7 @@
 package shop.pet.track.entity;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 
 @Entity
 @Table(name = "pet")
